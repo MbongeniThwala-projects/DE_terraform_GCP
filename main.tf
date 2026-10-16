@@ -9,13 +9,14 @@ terraform {
 
 provider "google" {
   # Configuration options
-  project = "project-4f598fab-e29b-4600-b49"
-  region  = "africa-south1"
+  credentials = file(var.credentials)
+  project     = var.project
+  region      = var.region
 }
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "project-4f598fab-e29b-4600-b49-terra-bucket"
-  location      = "africa-south1"
+  name          = var.gsc_bucket_name
+  location      = var.location
   force_destroy = true
 
   uniform_bucket_level_access = true
@@ -28,4 +29,10 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
